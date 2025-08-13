@@ -1,0 +1,10 @@
+---
+version: "3.6"
+
+services:
+  composer:
+    image: composer
+    volumes:
+      - "~/.composer:/tmp"
+      - "./:/app"
+    command: ["install", "--ignore-platform-reqs"]
