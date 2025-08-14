@@ -10,7 +10,7 @@
     "laminas/laminas-cache-storage-adapter-apcu": "^2.4",
     "laminas/laminas-servicemanager": "^3.18",
     "laminas/laminas-modulemanager": "^2.8",
-    "ext-apcu": "5.1.10"
+    "ext-apcu": "^5.1"
   },
   "autoload": {
     "psr-4": {
