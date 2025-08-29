@@ -3,14 +3,11 @@
   "description": "AWS Secrets Manager caching for PHP (Laminas, APCu cache storage, ENV-prefixed secrets).",
   "prefer-stable": true,
   "minimum-stability": "dev",
-  "keywords": ["aws", "secrets manager", "laminas", "apcu", "cache"],
+  "keywords": ["aws", "secrets manager", "laminas", "cache"],
   "require": {
     "php": "^8.1",
     "aws/aws-sdk-php": "^3.198 || ^3.300",
-    "laminas/laminas-cache-storage-adapter-apcu": "^2.4",
-    "laminas/laminas-servicemanager": "^3.18",
-    "laminas/laminas-modulemanager": "^2.8",
-    "ext-apcu": "^5.1"
+    "laminas/laminas-cache": "^4.1"
   },
   "autoload": {
     "psr-4": {

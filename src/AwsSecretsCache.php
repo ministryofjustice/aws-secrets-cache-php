@@ -13,15 +13,16 @@ class AwsSecretsCache
     private const NS = 'aws';
 
     public function __construct(
-        private readonly string $environment,
+        private readonly ?string $environment,
         private readonly StorageInterface $storage,
         private readonly SecretsManagerClient $client
     ) {}
 
     public function getValue(string $name): string
     {
-        $name = $this->environment . '/' . $name;
-        $key = self::NS . ':' . $name;
+        $qualifiedName = $this->qualify($name);
+
+        $key = self::NS . ':' . $qualifiedName;
 
         if ($this->storage->hasItem($key)) {
             /** @var string $cached */
@@ -34,9 +35,9 @@ class AwsSecretsCache
         return $value;
     }
 
-    protected function getValueFromAWS(string $name): string
+    protected function getValueFromAWS(string $qualifiedName): string
     {
-        $result = $this->client->getSecretValue(['SecretId' => $name]);
+        $result = $this->client->getSecretValue(['SecretId' => $qualifiedName]);
 
         $secret = false;
         if (isset($result['SecretString'])) {
@@ -46,7 +47,7 @@ class AwsSecretsCache
         }
 
         if ($secret === false) {
-            throw new InvalidSecretResponseException('No value returned for requested key ' . $name);
+            throw new InvalidSecretResponseException('No value returned for requested key ' . $qualifiedName);
         }
 
         return (string)$secret;
@@ -54,10 +55,28 @@ class AwsSecretsCache
 
     public function clearCache(string $name): bool
     {
-        $key = self::NS . ':' . $name;
+        $qualifiedName = $this->qualify($name);
+
+        $key = self::NS . ':' . $qualifiedName;
         if ($this->storage->hasItem($key)) {
             return (bool)$this->storage->removeItem($key);
         }
         return false;
+    }
+
+    private function qualify(string $name): string
+    {
+        $name = ltrim($name, '/');
+
+        if ($this->environment === null || $this->environment === '') {
+            return $name;
+        }
+
+        $envPrefix = rtrim($this->environment, '/') . '/';
+        if (str_starts_with($name, $envPrefix)) {
+            return $name; // already qualified
+        }
+
+        return $envPrefix . $name;
     }
 }
