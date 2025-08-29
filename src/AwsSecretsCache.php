@@ -30,7 +30,7 @@ class AwsSecretsCache
             return $cached;
         }
 
-        $value = $this->getValueFromAWS($name);
+        $value = $this->getValueFromAWS($qualifiedName);
         $this->storage->setItem($key, $value);
         return $value;
     }
