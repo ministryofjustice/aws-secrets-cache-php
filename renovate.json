@@ -1,6 +1,42 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
-  ]
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "branchNameStrict": true,
+  "branchPrefix": "renovate-",
+  "labels": ["Dependencies", "Renovate"],
+  "prConcurrentLimit": 0,
+  "configMigration": true,
+  "minimumReleaseAge": "7 days",
+  "packageRules": [
+    {
+      "groupName": "Minor & Patch Updates",
+      "groupSlug": "all-minor-patch-updates",
+      "matchUpdateTypes": ["minor", "patch"],
+      "schedule": ["on sunday"],
+      "commitMessageSuffix": " #patch",
+      "matchPackageNames": ["*"]
+    },
+    {
+      "groupName": "Github Patch & Minor Updates",
+      "groupSlug": "github-minor-patch-updates",
+      "matchUpdateTypes": ["minor", "patch"],
+      "schedule": ["on sunday"],
+      "commitMessageSuffix": " #patch",
+      "matchPackageNames": ["*"],
+      "matchFileNames": [".github/**"]
+    }
+  ],
+  "major": {
+    "schedule": ["on sunday"],
+    "commitMessageSuffix": " #minor"
+  },
+  "vulnerabilityAlerts": {
+    "groupName": "Security Alerts",
+    "minimumReleaseAge": null,
+    "commitMessagePrefix": "[SECURITY]",
+    "branchTopic": "{{{datasource}}}-{{{depName}}}-vulnerability"
+  }
 }
