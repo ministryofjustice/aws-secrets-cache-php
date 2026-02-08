@@ -6,7 +6,7 @@
   "keywords": ["aws", "secrets manager", "laminas", "cache"],
   "require": {
     "aws/aws-sdk-php": "^3.198 || ^3.300",
-    "laminas/laminas-cache-storage-adapter-apcu": "^2.4"
+    "laminas/laminas-cache-storage-adapter-apcu": "^3.0"
   },
   "autoload": {
     "psr-4": {
