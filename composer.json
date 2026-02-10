@@ -32,7 +32,7 @@
   "config": {
     "sort-packages": true,
     "platform": {
-        "php": "8.4"
+        "php": "8.2"
     }
   }
 }
