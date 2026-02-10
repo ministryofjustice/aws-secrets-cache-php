@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ["8.2", "8.3", "8.4"]
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+      - run: composer install --no-interaction --no-progress --prefer-dist
+      - run: composer phpcs
+      - run: composer phpstan
+      - run: composer test
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: '0'
+      - name: "Generate semver tag and release"
+        id: semver_tag
+        uses: ministryofjustice/opg-github-actions/actions/semver@b8868247a908f74fafe1905701391580575a6d35 # v4.3.10
+        with:
+          create_release: false
+          default_bump: ${{ github.event_name == 'workflow_dispatch' && 'none' || 'minor' }}
+          prerelease: ${{ github.ref_name == 'main' && 'false' || 'true' }}

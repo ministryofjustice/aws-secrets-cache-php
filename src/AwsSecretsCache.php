@@ -16,7 +16,8 @@ class AwsSecretsCache
         private readonly ?string $environment,
         private readonly StorageInterface $storage,
         private readonly SecretsManagerClient $client
-    ) {}
+    ) {
+    }
 
     public function getValue(string $name): string
     {
@@ -37,6 +38,12 @@ class AwsSecretsCache
 
     protected function getValueFromAWS(string $qualifiedName): string
     {
+        /**
+         * @var array{
+         *   SecretBinary?: string,
+         *   SecretString?: string,
+         * } $result
+         */
         $result = $this->client->getSecretValue(['SecretId' => $qualifiedName]);
 
         $secret = false;
