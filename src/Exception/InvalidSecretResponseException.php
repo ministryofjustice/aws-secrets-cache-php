@@ -6,4 +6,6 @@ namespace MoJ\AwsSecretsCache\Exception;
 
 use Exception;
 
-class InvalidSecretResponseException extends Exception {}
+class InvalidSecretResponseException extends Exception
+{
+}

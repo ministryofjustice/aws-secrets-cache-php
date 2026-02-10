@@ -5,6 +5,7 @@
   "minimum-stability": "dev",
   "keywords": ["aws", "secrets manager", "laminas", "cache"],
   "require": {
+    "php": "^8.2",
     "aws/aws-sdk-php": "^3.198 || ^3.300",
     "laminas/laminas-cache-storage-adapter-apcu": "^2.4"
   },
@@ -25,8 +26,8 @@
   },
   "scripts": {
     "test": "phpunit",
-    "stan": "phpstan analyse --memory-limit=1G",
-    "cs": "phpcs -s"
+    "phpstan": "phpstan analyse --memory-limit=1G",
+    "phpcs": "phpcs -s ."
   },
   "config": {
     "sort-packages": true
