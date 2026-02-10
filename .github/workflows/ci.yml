@@ -9,11 +9,14 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ["8.2", "8.3", "8.4"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.1"
+          php-version: ${{ matrix.php-version }}
       - run: composer install --no-interaction --no-progress --prefer-dist
       - run: composer phpcs
       - run: composer phpstan
@@ -26,7 +29,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.1"
+          php-version: "8.x"
       - run: composer install --no-interaction --no-progress --prefer-dist
       - name: Publish to Composer
         env:
