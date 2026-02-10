@@ -6,8 +6,8 @@
   "keywords": ["aws", "secrets manager", "laminas", "cache"],
   "require": {
     "php": "^8.2",
-    "aws/aws-sdk-php": "^3.198 || ^3.300",
-    "laminas/laminas-cache-storage-adapter-apcu": "^2.4"
+    "aws/aws-sdk-php": "^3.198",
+    "laminas/laminas-cache": "^3.0"
   },
   "autoload": {
     "psr-4": {
@@ -30,6 +30,9 @@
     "phpcs": "phpcs -s ."
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "platform": {
+        "php": "8.4"
+    }
   }
 }
