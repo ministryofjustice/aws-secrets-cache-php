@@ -13,7 +13,7 @@ jobs:
       matrix:
         php-version: ["8.2", "8.3", "8.4"]
     steps:
-      - uses: actions/checkout@v4@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
@@ -23,15 +23,15 @@ jobs:
       - run: composer test
 
   publish:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          php-version: "8.x"
-      - run: composer install --no-interaction --no-progress --prefer-dist
-      - name: Publish to Composer
-        env:
-          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
-        run: composer publish
+          fetch-depth: '0'
+      - name: "Generate semver tag and release"
+        id: semver_tag
+        uses: ministryofjustice/opg-github-actions/actions/semver@b8868247a908f74fafe1905701391580575a6d35 # v4.3.10
+        with:
+          create_release: false
+          default_bump: ${{ github.event_name == 'workflow_dispatch' && 'none' || 'minor' }}
+          prerelease: ${{ github.ref_name == 'main' && 'false' || 'true' }}
