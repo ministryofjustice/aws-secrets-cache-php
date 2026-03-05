@@ -7,33 +7,33 @@ namespace MoJ\AwsSecretsCache\Tests;
 use PHPUnit\Framework\TestCase;
 use MoJ\AwsSecretsCache\AwsSecretsCache;
 use Aws\SecretsManager\SecretsManagerClient;
-use Laminas\Cache\Storage\StorageInterface;
 use MoJ\AwsSecretsCache\Exception\InvalidSecretResponseException;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\SimpleCache\CacheInterface;
 
 class AwsSecretsCacheTest extends TestCase
 {
-    private StorageInterface&MockObject $storage;
+    private CacheInterface&MockObject $cache;
     private SecretsManagerClient&MockObject $client;
     private AwsSecretsCache $sut;
 
     protected function setUp(): void
     {
-        $this->storage = $this->createMock(StorageInterface::class);
+        $this->cache = $this->createMock(CacheInterface::class);
         $this->client = $this->createMock(SecretsManagerClient::class);
 
-        $this->sut = new AwsSecretsCache('test', $this->storage, $this->client);
+        $this->sut = new AwsSecretsCache('test', $this->cache, $this->client);
     }
 
     public function testGetValueReturnsCachedValue()
     {
-        $this->storage->expects($this->once())
-            ->method('hasItem')
+        $this->cache->expects($this->once())
+            ->method('has')
             ->with('aws:test/my-secret')
             ->willReturn(true);
 
-        $this->storage->expects($this->once())
-            ->method('getItem')
+        $this->cache->expects($this->once())
+            ->method('get')
             ->with('aws:test/my-secret')
             ->willReturn('cached-value');
 
@@ -43,8 +43,8 @@ class AwsSecretsCacheTest extends TestCase
 
     public function testGetValueFetchesValueFromAWS()
     {
-        $this->storage->expects($this->once())
-            ->method('hasItem')
+        $this->cache->expects($this->once())
+            ->method('has')
             ->with('aws:test/my-secret')
             ->willReturn(false);
 
@@ -53,8 +53,8 @@ class AwsSecretsCacheTest extends TestCase
             ->with('getSecretValue', [['SecretId' => 'test/my-secret']])
             ->willReturn(['SecretString' => 'aws-value']);
 
-        $this->storage->expects($this->once())
-            ->method('setItem')
+        $this->cache->expects($this->once())
+            ->method('set')
             ->with('aws:test/my-secret', 'aws-value');
 
         $value = $this->sut->getValue('my-secret');
@@ -63,8 +63,8 @@ class AwsSecretsCacheTest extends TestCase
 
     public function testGetValueFailsIfSecretDoesNotExist()
     {
-        $this->storage->expects($this->once())
-            ->method('hasItem')
+        $this->cache->expects($this->once())
+            ->method('has')
             ->with('aws:test/my-secret')
             ->willReturn(false);
 
@@ -79,13 +79,13 @@ class AwsSecretsCacheTest extends TestCase
 
     public function testClearCacheRemovesCachedValue()
     {
-        $this->storage->expects($this->once())
-            ->method('hasItem')
+        $this->cache->expects($this->once())
+            ->method('has')
             ->with('aws:test/my-secret')
             ->willReturn(true);
 
-        $this->storage->expects($this->once())
-            ->method('removeItem')
+        $this->cache->expects($this->once())
+            ->method('delete')
             ->with('aws:test/my-secret')
             ->willReturn(true);
 
