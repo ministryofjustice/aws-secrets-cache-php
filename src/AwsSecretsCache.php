@@ -5,13 +5,20 @@ declare(strict_types=1);
 namespace MoJ\AwsSecretsCache;
 
 use Aws\SecretsManager\SecretsManagerClient;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\StorageInterface;
 use MoJ\AwsSecretsCache\Exception\InvalidSecretResponseException;
 
+/**
+ * @template TOptions of AdapterOptions
+ */
 class AwsSecretsCache
 {
     private const NS = 'aws';
 
+    /**
+     * @param StorageInterface<TOptions> $storage
+     */
     public function __construct(
         private readonly ?string $environment,
         private readonly StorageInterface $storage,
