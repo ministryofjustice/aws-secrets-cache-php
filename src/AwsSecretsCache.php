@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MoJ\AwsSecretsCache;
 
 use Aws\SecretsManager\SecretsManagerClient;
-use Laminas\Cache\Storage\StorageInterface;
 use MoJ\AwsSecretsCache\Exception\InvalidSecretResponseException;
+use Psr\SimpleCache\CacheInterface;
 
 class AwsSecretsCache
 {
@@ -14,7 +14,7 @@ class AwsSecretsCache
 
     public function __construct(
         private readonly ?string $environment,
-        private readonly StorageInterface $storage,
+        private readonly CacheInterface $storage,
         private readonly SecretsManagerClient $client
     ) {
     }
@@ -25,14 +25,14 @@ class AwsSecretsCache
 
         $key = self::NS . ':' . $qualifiedName;
 
-        if ($this->storage->hasItem($key)) {
+        if ($this->storage->has($key)) {
             /** @var string $cached */
-            $cached = $this->storage->getItem($key);
+            $cached = $this->storage->get($key);
             return $cached;
         }
 
         $value = $this->getValueFromAWS($qualifiedName);
-        $this->storage->setItem($key, $value);
+        $this->storage->set($key, $value);
         return $value;
     }
 
@@ -65,8 +65,8 @@ class AwsSecretsCache
         $qualifiedName = $this->qualify($name);
 
         $key = self::NS . ':' . $qualifiedName;
-        if ($this->storage->hasItem($key)) {
-            return (bool)$this->storage->removeItem($key);
+        if ($this->storage->has($key)) {
+            return (bool)$this->storage->delete($key);
         }
         return false;
     }
