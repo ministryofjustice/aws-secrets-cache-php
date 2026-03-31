@@ -1,0 +1,16 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "phpunit",
+      "severity": "error",
+      "pattern": [
+        {
+          "regexp": "##teamcity\\[testFailed (?:.*?)message='(.*?)' details='\\/app\\/(.*?):(\\d+)(?:\\|n.*?)'(?:.*?)\\]",
+          "message": 1,
+          "file": 2,
+          "line": 3
+        }
+      ]
+    }
+  ]
+}
