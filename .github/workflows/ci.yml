@@ -14,20 +14,23 @@ jobs:
         php-version: ["8.2", "8.3", "8.4"]
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f # v2.37.0
-        with:
-          php-version: ${{ matrix.php-version }}
-      - run: composer install --no-interaction --no-progress --prefer-dist
-      - run: composer phpcs
-      - run: composer phpstan
-      - run: composer test
+      - run: docker compose run --rm composer install --ignore-platform-reqs
+      - run: docker run -v ${{ github.workspace }}:/app --name=php-${{ matrix.php-version }} php:${{ matrix.php-version }}-alpine php -v
+      - run: echo "::add-matcher::.github/phpcs-problem-matcher.json"
+      - run: docker exec php-${{ matrix.php-version }} composer phpcs -- --report=xml
+      - if: always()
+        run: docker exec php-${{ matrix.php-version }} composer phpstan -- --error-format=github
+      - if: always()
+        run: docker exec php-${{ matrix.php-version }} composer test
+      - if: always()
+        run: docker stop php-${{ matrix.php-version }} && docker rm php-${{ matrix.php-version }}
 
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          fetch-depth: '0'
+          fetch-depth: "0"
       - name: "Generate semver tag and release"
         id: semver_tag
         uses: ministryofjustice/opg-github-actions/actions/semver@b8868247a908f74fafe1905701391580575a6d35 # v4.3.10
