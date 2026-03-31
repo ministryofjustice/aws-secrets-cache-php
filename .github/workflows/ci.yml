@@ -11,23 +11,29 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ["8.2", "8.3", "8.4"]
+        php:
+        - version: 8.2
+          sha: 1a6eef0e6945a01b4baf7e60052f8a839125eabf0c6c79212142f7c9ef8b9f7b
+        - version: 8.3
+          sha: 2fc86f12b6fa3a7d6cf979c64eef6c8926662cee7689b44017d23c73e78a0150
+        - version: 8.4
+          sha: 9b82b39a26336318b0d3b0d12c6e21a292115c4223ebece6ce9b3aa8c9f86bd3
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f # v2.37.0
-        with:
-          php-version: ${{ matrix.php-version }}
-      - run: composer install --no-interaction --no-progress --prefer-dist
-      - run: composer phpcs
-      - run: composer phpstan
-      - run: composer test
+      - run: docker compose build --build-arg PHP_VERSION=${{ matrix.php.version }} --build-arg PHP_SHA=${{ matrix.php.sha }} test-runner
+      - run: echo "::add-matcher::.github/phpcs-problem-matcher.json"
+      - run: docker compose run --rm test-runner composer phpcs -- --report=xml
+      - if: always()
+        run: docker compose run --rm test-runner composer phpstan -- --error-format=github
+      - if: always()
+        run: docker compose run --rm test-runner composer test
 
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          fetch-depth: '0'
+          fetch-depth: "0"
       - name: "Generate semver tag and release"
         id: semver_tag
         uses: ministryofjustice/opg-github-actions/actions/semver@b8868247a908f74fafe1905701391580575a6d35 # v4.3.10
