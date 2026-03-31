@@ -1,0 +1,20 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "phpunit",
+      "severity": "error",
+      "pattern": [
+        {
+          "regexp": "<testcase(?:.*)file=\"(?:\\/home\\/runner\\/work\\/aws-secrets-cache-php\\/aws-secrets-cache-php\\/)?(?:.*)\"(.*)line=\"(\\d*)\"(.*)$",
+          "file": 1,
+          "line": 2
+        },
+        {
+          "regexp": "<failure(?:.*?)>(.*)<\/failure>$",
+          "message": 1,
+          "loop": true
+        }
+      ]
+    }
+  ]
+}
