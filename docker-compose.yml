@@ -8,3 +8,15 @@ services:
       - "~/.composer:/tmp"
       - "./:/app"
     command: ["install", "--ignore-platform-reqs"]
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: test.Dockerfile
+    volumes:
+      - "./src:/app/src"
+      - "./tests:/app/tests"
+      - "./test-results:/app/test-results"
+      - "./phpcs.xml.dist:/app/phpcs.xml.dist"
+      - "./phpstan.neon:/app/phpstan.neon"
+      - "./phpunit.xml:/app/phpunit.xml"
