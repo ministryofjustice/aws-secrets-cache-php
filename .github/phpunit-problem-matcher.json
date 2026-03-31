@@ -1,0 +1,23 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "phpunit",
+      "severity": "error",
+      "pattern": [
+        {
+          "regexp": "<testsuite name=\"(?:\\/home\\/runner\\/work\\/)?(.*)\"(.*)>$",
+          "file": 1
+        },
+        {
+          "regexp": "<testcase(.*) line=\"(\\d*)\"(.*)$",
+          "line": 1
+        },
+        {
+          "regexp": "<failure>(.*)</failure>$",
+          "message": 1,
+          "loop": true
+        }
+      ]
+    }
+  ]
+}
