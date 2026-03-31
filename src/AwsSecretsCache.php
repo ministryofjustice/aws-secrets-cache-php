@@ -25,10 +25,8 @@ class AwsSecretsCache
 
         $key = self::NS . ':' . $qualifiedName;
 
-
-
-        
         if ($this->storage->has($key)) {
+            /** @var string $cached */
             $cached = $this->storage->get($key);
             return $cached;
         }

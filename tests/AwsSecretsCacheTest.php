@@ -29,7 +29,7 @@ class AwsSecretsCacheTest extends TestCase
     {
         $this->cache->expects($this->once())
             ->method('has')
-            ->with('aws:test/my-secret--fail')
+            ->with('aws:test/my-secret')
             ->willReturn(true);
 
         $this->cache->expects($this->once())
