@@ -20,9 +20,7 @@ jobs:
       - if: always()
         run: docker compose run --rm test-runner composer phpstan -- --error-format=github
       - if: always()
-        run: docker compose run --rm test-runner composer test -- --log-junit=/app/test-results/junit.xml
-      - if: always()
-        run: more ./test-results/junit.xml
+        run: docker compose run --rm test-runner composer test
 
   publish:
     runs-on: ubuntu-latest
