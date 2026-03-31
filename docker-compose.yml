@@ -8,3 +8,10 @@ services:
       - "~/.composer:/tmp"
       - "./:/app"
     command: ["install", "--ignore-platform-reqs"]
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: test.Dockerfile
+    volumes:
+      - "./:/app"

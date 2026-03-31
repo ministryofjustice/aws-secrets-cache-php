@@ -1,0 +1,16 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "phpunit",
+      "severity": "error",
+      "pattern": [
+        {
+          "regexp": "##teamcity\\[testFailed name='testGetValueReturnsCachedValue' message='(.*?)' details='\\/home\\/runner\\/work\\/aws-secrets-cache-php\\/aws-secrets-cache-php\\/(.*?):(\\d+)(?:\\|n.*?)'(?:.*?)\\]",
+          "message": 1,
+          "file": 2,
+          "line": 3
+        }
+      ]
+    }
+  ]
+}
