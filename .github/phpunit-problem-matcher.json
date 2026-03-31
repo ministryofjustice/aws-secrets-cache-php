@@ -1,0 +1,18 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "phpunit",
+      "severity": "error",
+      "pattern": [
+        {
+          "regexp": "##teamcity\\[testStarted (?:.*?)locationHint='php_qn:\\/\\/\\/home\\/runner\\/work\\/aws-secrets-cache-php\\/aws-secrets-cache-php\\/(.*?)::(?:.*?)'(?:.*?)\\]",
+          "file": 1
+        },
+        {
+          "regexp": "##teamcity\\[testFailed (?:.*?)message='(.*?)'(?:.*?)\\]",
+          "message": 1
+        }
+      ]
+    }
+  ]
+}
