@@ -18,16 +18,23 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
       - run: composer install --no-interaction --no-progress --prefer-dist
-      - run: composer phpcs
-      - run: composer phpstan
-      - run: composer test
+      - run: echo "::add-matcher::.github/phpcs-problem-matcher.json"
+      - run: echo "::add-matcher::.github/phpunit-problem-matcher.json"
+      - if: always()
+        run: composer phpcs -- --report=xml
+      - if: always()
+        run: composer phpstan -- --error-format=github
+      - if: always()
+        run: composer test -- --log-teamcity=./test-results/phpunit.teamcity.txt
+      - if: always()
+        run: more test-results/phpunit.teamcity.txt
 
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          fetch-depth: '0'
+          fetch-depth: "0"
       - name: "Generate semver tag and release"
         id: semver_tag
         uses: ministryofjustice/opg-github-actions/actions/semver@b8868247a908f74fafe1905701391580575a6d35 # v4.3.10
