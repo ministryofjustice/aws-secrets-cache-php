@@ -36,7 +36,7 @@ jobs:
           fetch-depth: "0"
       - name: "Generate semver tag and release"
         id: semver_tag
-        uses: ministryofjustice/opg-github-actions/actions/semver@b8868247a908f74fafe1905701391580575a6d35 # v4.3.10
+        uses: ministryofjustice/opg-github-actions/actions/semver@b605e1e2c94b399e8139c4c2be2c8730700e0004 # v4.5.2
         with:
           create_release: false
           default_bump: ${{ github.event_name == 'workflow_dispatch' && 'none' || 'minor' }}
