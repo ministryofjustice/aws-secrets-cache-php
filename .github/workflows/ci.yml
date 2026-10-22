@@ -13,11 +13,11 @@ jobs:
       matrix:
         php:
         - version: 8.2
-          sha: 1a6eef0e6945a01b4baf7e60052f8a839125eabf0c6c79212142f7c9ef8b9f7b
+          sha: 1db421dc4d5b4f44df4b09292f9edc29966496030fba7c51bb34131664fb7349
         - version: 8.3
-          sha: 2fc86f12b6fa3a7d6cf979c64eef6c8926662cee7689b44017d23c73e78a0150
+          sha: a7e67cd11bc8b6d8c893bf36d69a92f56b59c2d8d70015af9e3eff03e199333a
         - version: 8.4
-          sha: 9b82b39a26336318b0d3b0d12c6e21a292115c4223ebece6ce9b3aa8c9f86bd3
+          sha: 17bbc8e655709d42c56e4eb24a9c715105a7e446358dba4d26dc06e514d520ef
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: docker compose build --build-arg PHP_VERSION=${{ matrix.php.version }} --build-arg PHP_SHA=${{ matrix.php.sha }} test-runner
