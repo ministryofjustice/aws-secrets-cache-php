@@ -3,7 +3,7 @@ version: "3.6"
 
 services:
   composer:
-    image: composer@sha256:da624c2c705d54e2f5a9bb77a5dc6c7d091711433ebefd7035672e84c2010fee
+    image: composer@sha256:919efe8e62179c71dfd31fad035fd671fe7454211c6b2aa30a10af0ab4acedba
     volumes:
       - "~/.composer:/tmp"
       - "./:/app"
